@@ -1,0 +1,11 @@
+// SC-200 Project: Suspicious Sign-in Activity
+// Purpose: Find IP addresses with repeated failed sign-ins.
+
+SigninLogs
+| where TimeGenerated >= ago(24h)
+| where ResultType != "0"
+| summarize FailedAttempts = count(),
+            TargetedUsers = dcount(UserPrincipalName)
+    by IPAddress
+| where FailedAttempts >= 10
+| order by FailedAttempts desc
