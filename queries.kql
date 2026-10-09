@@ -1,0 +1,10 @@
+```kusto
+// SC-200 Project: Failed Sign-in Investigation
+// Purpose: Identify repeated failed sign-in attempts.
+
+SigninLogs
+| where TimeGenerated >= ago(24h)
+| where ResultType != "0"
+| summarize FailedAttempts = count() by UserPrincipalName, IPAddress
+| order by FailedAttempts desc
+```
